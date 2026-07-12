@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const CHARS =
   "$@B%8&WM#*oahkbdpqwmZO0QLCJYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
 
-export default function Ascii({ pixels, width, height }) {
+export default function Ascii({ pixels, width, height, contrast }) {
   const [ascii, setAscii] = useState("");
 
   useEffect(() => {
@@ -20,7 +20,10 @@ export default function Ascii({ pixels, width, height }) {
         const b = pixels[index + 2];
 
         let brightness = 0.299 * r + 0.587 * g + 0.114 * b;
-        brightness = 128 + (brightness - 128) * 0.8;    
+
+        brightness = 128 + (brightness - 128) * contrast;
+
+        brightness = Math.max(0, Math.min(255, brightness));
 
         const charIndex = Math.floor(
           (1 - brightness / 255) * (CHARS.length - 1),
@@ -33,7 +36,7 @@ export default function Ascii({ pixels, width, height }) {
     }
 
     setAscii(result);
-  }, [pixels, width, height]);
+  }, [pixels, width, height, contrast]);
 
   return (
     <pre
