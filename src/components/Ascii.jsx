@@ -1,16 +1,49 @@
 import { useEffect, useState } from "react";
 
-const CHARSETS = {
+export const CHARSETS = {
   Simple: "@%#*+=-:. ",
-  Detailed: "$@B%8&WM#*oahkbdpqwmZO0QLCJYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ",
+  Detailed:
+    "$@B%8&WM#*oahkbdpqwmZO0QLCJYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ",
   Blocks: "█▓▒░ ",
   Binary: "10 ",
+  Letters: "MWNXK0Okxdolc:;.. ",
+  Matrix: "01ZXS#@*+=-:. ",
+  Hex: "0123456789ABCDEF",
+  Braille: "⣿⣷⣶⣤⣄⣀ ",
 };
 
-
-export default function Ascii({ pixels, width, height, contrast, brightness, chars}) {
+export default function Ascii({
+  pixels,
+  width,
+  height,
+  contrast,
+  brightness,
+  chars,
+}) {
   const [ascii, setAscii] = useState("");
+  const [copied, setCopied] = useState(false);
 
+const handleCopy = async () => {
+  await navigator.clipboard.writeText(ascii);
+  setCopied(true);
+
+  setTimeout(() => {
+    setCopied(false);
+  }, 2000);
+};
+  const handleDownload = () => {
+    const blob = new Blob([ascii], { type: "text/plain" });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ascii-art.txt";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
 
   useEffect(() => {
     if (!pixels || width === 0 || height === 0) return;
@@ -46,17 +79,27 @@ export default function Ascii({ pixels, width, height, contrast, brightness, cha
   }, [pixels, width, height, contrast, brightness, chars]);
 
   return (
-    <pre
-      style={{
-        fontFamily: "Consolas, 'Courier New', monospace",
-        fontWeight: "bold",
-        fontSize: "6px",
-        lineHeight: "5px",
-        letterSpacing: "-0.5px",
-        whiteSpace: "pre",
-      }}
-    >
-      {ascii}
-    </pre>
+    <>
+      {ascii && (
+        <>
+          <pre
+            style={{
+              fontFamily: "Consolas, 'Courier New', monospace",
+              fontWeight: "bold",
+              fontSize: "6px",
+              lineHeight: "5px",
+              letterSpacing: "-0.5px",
+              whiteSpace: "pre",
+            }}
+          >
+            {ascii}
+          </pre>
+          <button onClick={handleCopy}>{copied ? "✅ Copied!" : "📋 Copy"}</button>
+          <button onClick={handleDownload}>Download</button>
+        </>
+      )}
+    </>
   );
+
+  
 }
