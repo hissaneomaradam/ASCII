@@ -45,7 +45,7 @@ export default function Footer() {
         />
         <a
           className="app__foot-link"
-          href="mailto:hissaneomaradam@gmail.com"
+          href="mailto:omaradamhissane@gmail.com"
           aria-label="Email"
         >
           <svg width="16" height="16" aria-hidden="true">

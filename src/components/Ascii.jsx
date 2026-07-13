@@ -23,14 +23,14 @@ export default function Ascii({
   const [ascii, setAscii] = useState("");
   const [copied, setCopied] = useState(false);
 
-const handleCopy = async () => {
-  await navigator.clipboard.writeText(ascii);
-  setCopied(true);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(ascii);
+    setCopied(true);
 
-  setTimeout(() => {
-    setCopied(false);
-  }, 2000);
-};
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
   const handleDownload = () => {
     const blob = new Blob([ascii], { type: "text/plain" });
 
@@ -82,24 +82,11 @@ const handleCopy = async () => {
     <>
       {ascii && (
         <>
-          <pre
-            style={{
-              fontFamily: "Consolas, 'Courier New', monospace",
-              fontWeight: "bold",
-              fontSize: "6px",
-              lineHeight: "5px",
-              letterSpacing: "-0.5px",
-              whiteSpace: "pre",
-            }}
-          >
-            {ascii}
-          </pre>
+          <pre>{ascii}</pre>
           <button onClick={handleCopy}>{copied ? "✅ Copied!" : "📋 Copy"}</button>
           <button onClick={handleDownload}>Download</button>
         </>
       )}
     </>
   );
-
-  
 }

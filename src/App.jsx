@@ -1,9 +1,10 @@
 import ImageUpload from "./components/ImageUpload";
 import Canvas from "./components/Canvas";
 import Ascii from "./components/Ascii";
-import { useState, useEffect } from "react";
-import Footer from "./components/Footer"; 
+import { useState, useEffect, useRef } from "react";
+import Footer from "./components/Footer";
 import { CHARSETS } from "./components/Ascii";
+import logo from "./assets/logo.svg";
 import "./App.css";
 
 const DEFAULTS = {
@@ -41,11 +42,24 @@ function App() {
   };
 
   const [stageFontPx, setStageFontPx] = useState(6);
+  const stageRef = useRef(null);
+
   useEffect(() => {
     if (!canvasSize.width) return;
-    const stageWidth = Math.min(1040, window.innerWidth - 360 - 48 - 48);
-    const perChar = stageWidth / canvasSize.width;
-    setStageFontPx(Math.max(2, Math.min(10, Math.round(perChar * 1.0))));
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const compute = () => {
+      const available = stage.clientWidth - 40 - 2;
+      const perChar = available / canvasSize.width;
+      setStageFontPx(Math.max(2, Math.min(14, Math.round(perChar))));
+    };
+
+    compute();
+
+    const ro = new ResizeObserver(compute);
+    ro.observe(stage);
+    return () => ro.disconnect();
   }, [canvasSize.width]);
 
   const dirty =
@@ -58,8 +72,13 @@ function App() {
     <div className="app" data-theme={theme}>
       <header className="app__bar">
         <div className="app__brand">
-          <span className="app__brand-mark" aria-hidden="true">
-            {"</>"}
+          <span className="app__brand-mark">
+            <img
+              src={logo}
+              alt="ASCII Generator Logo"
+              width={45}
+              height={45}
+            />
           </span>
           <div className="app__brand-text">
             <h1 className="app__title">ASCII</h1>
@@ -202,7 +221,11 @@ function App() {
           )}
         </aside>
 
-        <section className="app__stage" aria-label="ASCII output">
+        <section
+          className="app__stage"
+          aria-label="ASCII output"
+          ref={stageRef}
+        >
           {/* Hidden helper canvas used internally by the converter */}
           <Canvas
             image={image}
@@ -244,7 +267,7 @@ function App() {
           )}
         </section>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
