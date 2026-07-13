@@ -375,6 +375,45 @@
   outline-offset: 2px;
 }
 
+/* Colored / Black & White toggle in the Adjust panel — sized like the
+   other input controls (select, stage buttons), accent treatment when on. */
+.toggle {
+  width: 100%;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-h);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    background 160ms var(--ease),
+    border-color 160ms var(--ease),
+    color 160ms var(--ease),
+    transform 120ms var(--ease);
+}
+.toggle:hover {
+  border-color: var(--border-strong);
+  background: color-mix(in oklch, var(--accent-bg) 50%, var(--surface-2));
+}
+.toggle:active {
+  transform: translateY(1px);
+}
+.toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.toggle[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
 /* ---------------- Stage (ASCII output) ---------------- */
 .app__stage {
   position: relative;

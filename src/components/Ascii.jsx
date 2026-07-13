@@ -19,8 +19,10 @@ export default function Ascii({
   contrast,
   brightness,
   chars,
+  colored,
 }) {
   const [ascii, setAscii] = useState("");
+  const [coloredAscii, setColoredAscii] = useState([]);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -49,8 +51,10 @@ export default function Ascii({
     if (!pixels || width === 0 || height === 0) return;
 
     let result = "";
+    const lines = [];
 
     for (let y = 0; y < height; y++) {
+      const row = [];
       for (let x = 0; x < width; x++) {
         const index = (y * width + x) * 4;
 
@@ -69,21 +73,31 @@ export default function Ascii({
         const charIndex = Math.floor(
           (1 - brightnessValue / 255) * (CHARSETS[chars].length - 1),
         );
-        result += CHARSETS[chars][charIndex];
+        const char = CHARSETS[chars][charIndex];
+        result += char;
+        row.push(
+          <span key={`${x}-${y}`} style={{ color: `rgb(${r}, ${g}, ${b})` }}>
+            {char}
+          </span>,
+        );
       }
+      lines.push(row, "\n");
 
       result += "\n";
     }
 
     setAscii(result);
-  }, [pixels, width, height, contrast, brightness, chars]);
+    setColoredAscii(lines);
+  }, [pixels, width, height, contrast, brightness, chars, colored]);
 
   return (
     <>
       {ascii && (
         <>
-          <pre>{ascii}</pre>
-          <button onClick={handleCopy}>{copied ? "✅ Copied!" : "📋 Copy"}</button>
+          <pre>{colored ? coloredAscii : ascii}</pre>
+          <button onClick={handleCopy}>
+            {copied ? "✅ Copied!" : "📋 Copy"}
+          </button>
           <button onClick={handleDownload}>Download</button>
         </>
       )}

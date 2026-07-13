@@ -24,6 +24,8 @@ function App() {
   const [chars, setChars] = useState(DEFAULTS.chars);
   const [theme, setTheme] = useState("dark");
   const [fileName, setFileName] = useState("");
+  const [colored, setColored] = useState(false);
+
 
   const handleImageSelect = (file) => {
     const img = new Image();
@@ -31,6 +33,7 @@ function App() {
     img.onload = () => {
       setImage(img);
       setFileName(file.name);
+      setOutputWidth(img.width>200 ? 200 : img.width);
     };
   };
 
@@ -39,6 +42,7 @@ function App() {
     setBrightness(DEFAULTS.brightness);
     setOutputWidth(DEFAULTS.outputWidth);
     setChars(DEFAULTS.chars);
+    setColored(false);
   };
 
   const [stageFontPx, setStageFontPx] = useState(6);
@@ -73,12 +77,7 @@ function App() {
       <header className="app__bar">
         <div className="app__brand">
           <span className="app__brand-mark">
-            <img
-              src={logo}
-              alt="ASCII Generator Logo"
-              width={45}
-              height={45}
-            />
+            <img src={logo} alt="ASCII Generator Logo" width={45} height={45} />
           </span>
           <div className="app__brand-text">
             <h1 className="app__title">ASCII</h1>
@@ -141,6 +140,13 @@ function App() {
                   reset
                 </button>
               </div>
+              <button
+                className="toggle"
+                onClick={() => setColored(!colored)}
+                aria-pressed={colored}
+              >
+                {colored ? "Black & White" : "Colored"}
+              </button>
 
               <div className="field">
                 <div className="field__head">
@@ -226,7 +232,7 @@ function App() {
           aria-label="ASCII output"
           ref={stageRef}
         >
-          {/* Hidden helper canvas used internally by the converter */}
+
           <Canvas
             image={image}
             setPixels={setPixels}
@@ -262,6 +268,7 @@ function App() {
                 contrast={contrast}
                 brightness={brightness}
                 chars={chars}
+                colored={colored}
               />
             </div>
           )}

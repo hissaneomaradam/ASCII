@@ -122,16 +122,16 @@ npm run lint
 
 ## 💡 Roadmap
 
-- [ ] 🎨 Colored ASCII mode
-- [ ] 🖼️ Export as PNG
-- [ ] 🎥 Real-time webcam ASCII
-- [ ] ↩️ Invert / flip output
-- [ ] 🔡 Custom, user-defined character set field
+- [✔️] 🎨 Colored ASCII mode
+- [  ] 🖼️ Export as PNG
+- [  ] 🎥 Real-time webcam ASCII
+- [  ] ↩️ Invert / flip output
+- [  ] 🔡 Custom, user-defined character set field
 
 <details>
 <summary>Already shipped ✅</summary>
 
-Cleaner UI/UX, dark/light themes, brightness slider, adjustable output
+Cleaner UI/UX, colored ASCII mode, dark/light themes, brightness slider, adjustable output
 resolution, custom character sets, export as `.txt`, and copy to clipboard.
 
 </details>
